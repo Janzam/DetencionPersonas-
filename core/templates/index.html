@@ -3,84 +3,283 @@
 <head>
     <meta charset="UTF-8">
     <title>Contador de Personas en Tiempo Real</title>
-    <!-- Estilos CSS simples para una interfaz limpia y moderna -->
     <style>
-        body { font-family: sans-serif; text-align: center; background-color: #f4f4f9; }
-        .container { max-width: 900px; margin: 40px auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
-        h1 { color: #333; }
-        /* Estilo del recuadro del video */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+        
+        :root {
+            --primary-color: #4A90E2;
+            --secondary-color: #2C3E50;
+            --accent-color: #E74C3C;
+            --background-color: #ECF0F1;
+            --text-color: #2C3E50;
+        }
+        
+        body { 
+            font-family: 'Roboto', sans-serif;
+            text-align: center;
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+        
+        .container { 
+            max-width: 1000px;
+            margin: 20px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .container:hover {
+            transform: translateY(-5px);
+        }
+        
+        h1 { 
+            color: var(--secondary-color);
+            font-size: 2.2em;
+            margin-bottom: 30px;
+            font-weight: 500;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--primary-color);
+        }
+        
         #video-feed { 
-            width: 100%; 
-            max-width: 640px; 
-            border: 4px solid #8A2BE2; /* Borde morado vibrante */
-            border-radius: 8px; 
-            margin: 20px 0; 
-            display: block; 
-            margin-left: auto; 
-            margin-right: auto; 
+            width: 100%;
+            max-width: 800px;
+            border: none;
+            border-radius: 15px;
+            margin: 25px auto;
+            display: block;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
         }
-        /* Estilo del contador grande */
+        
+        #video-feed:hover {
+            transform: scale(1.02);
+        }
+        
         #counter-display { 
-            font-size: 2.5em; 
-            font-weight: bold; 
-            color: #8A2BE2; 
-            margin-top: 20px; 
+            font-size: 3em;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(74, 144, 226, 0.1);
+            border-radius: 12px;
+            display: inline-block;
+            transition: all 0.3s ease;
         }
-        .status { color: #555; margin-top: 10px; }
+        
+        #counter-display:hover {
+            background: rgba(74, 144, 226, 0.15);
+            transform: scale(1.05);
+        }
+        
+        .status { 
+            color: var(--text-color);
+            margin-top: 20px;
+            font-size: 1.1em;
+            padding: 15px;
+            border-radius: 8px;
+            background: rgba(44, 62, 80, 0.05);
+            display: inline-block;
+        }
+
+        .control-button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px;
+        }
+
+        .control-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .control-button.stopped {
+            background-color: var(--primary-color);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            #counter-display {
+                font-size: 2.5em;
+                padding: 15px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Contador de Personas (Detección en Tiempo Real)</h1>
+        <h1>Sistema de Detección de Personas en Tiempo Real</h1>
         
-        <!-- ELEMENTO DE LA SESIÓN 3: Contador básico -->
-        <div id="counter-display">Esperando Stream...</div>
+        <div id="counter-display">
+            <i class="fas fa-spinner fa-spin"></i> Esperando Stream...
+        </div>
         
-        <!-- Aquí se mostrará el stream de video procesado -->
         <img id="video-feed" src="" alt="Video de Detección de Personas" 
-            onerror="this.src='data:image/svg+xml;charset=UTF-8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'640\' height=\'480\' viewBox=\'0 0 640 480\'><rect width=\'100%\' height=\'100%\' fill=\'#ccc\'/><text x=\'50%\' y=\'50%\' font-size=\'20\' fill=\'#333\' text-anchor=\'middle\' dominant-baseline=\'middle\'>Cargando Stream de OpenCV...</text></svg>'" />
+            onerror="this.src='data:image/svg+xml;charset=UTF-8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'640\' height=\'480\' viewBox=\'0 0 640 480\'><rect width=\'100%\' height=\'100%\' fill=\'#ECF0F1\'/><text x=\'50%\' y=\'50%\' font-size=\'24\' fill=\'#2C3E50\' text-anchor=\'middle\' dominant-baseline=\'middle\'>Inicializando Stream...</text></svg>'"/>
         
-        <div class="status" id="connection-status">Estado: Conectando...</div>
+        <div class="status" id="connection-status">
+            <i class="fas fa-circle-notch fa-spin"></i> Conectando al servidor...
+        </div>
+
+        <button id="controlButton" class="control-button stopped">
+            <i class="fas fa-play"></i> Iniciar Detección
+        </button>
     </div>
 
+ 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
     <script>
-        // ----------------------------------------------------
-        // LÓGICA DE WEBSOCKETS EN JAVASCRIPT
-        // ----------------------------------------------------
+        // Espera a que el DOM esté cargado para asignar eventos
+        document.addEventListener('DOMContentLoaded', () => {
 
-        // Obtiene el protocolo correcto (ws:// o wss://) y la ruta del host
-        const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
-        const wsPath = protocol + window.location.host + '/ws/video/';
-        
-        // Abre la conexión WebSocket
-        const socket = new WebSocket(wsPath);
-        
-        const videoFeed = document.getElementById('video-feed');
-        const counterDisplay = document.getElementById('counter-display');
-        const statusDisplay = document.getElementById('connection-status');
+            // --- Elementos del DOM ---
+            const videoFeed = document.getElementById('video-feed');
+            const counterDisplay = document.getElementById('counter-display');
+            const statusDisplay = document.getElementById('connection-status');
+            const controlButton = document.getElementById('controlButton');
 
-        // Se ejecuta al recibir datos del servidor
-        socket.onmessage = function(e) {
-            const data = JSON.parse(e.data);
+            // --- Variables de Estado ---
+            let socket = null; // El socket se creará al presionar "Iniciar"
+            const wsProtocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+            const wsPath = wsProtocol + window.location.host + '/ws/video/';
+
+            // --- Imágenes de Placeholder ---
+            const imgPaused = 'data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480"><rect width="100%" height="100%" fill="%23ECF0F1"/><text x="50%" y="50%" font-size="24" fill="%232C3E50" text-anchor="middle" dominant-baseline="middle">Detección Detenida</text></svg>';
+            const imgConnecting = 'data:image/svg+xml;charset=UTF-8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'640\' height=\'480\' viewBox=\'0 0 640 480\'><rect width=\'100%\' height=\'100%\' fill=\'#ECF0F1\'/><text x=\'50%\' y=\'50%\' font-size=\'24\' fill=\'#2C3E50\' text-anchor=\'middle\' dominant-baseline=\'middle\'>Inicializando Stream...</text></svg>';
+
+            // --- Función para INICIAR la detección ---
+            function startDetection() {
+                // Prevenir múltiples conexiones si ya está abierto o conectando
+                if (socket && (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING)) {
+                    console.log("Socket ya está abierto o conectando.");
+                    return;
+                }
+
+                console.log("Iniciando nueva conexión WebSocket...");
+                // **PUNTO CLAVE: Se crea un NUEVO socket**
+                socket = new WebSocket(wsPath);
+
+                // Actualizar UI a estado "conectando"
+                statusDisplay.textContent = 'Estado: Conectando...';
+                statusDisplay.style.color = 'orange';
+                videoFeed.src = imgConnecting;
+                counterDisplay.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Conectando...';
+
+                // --- Eventos del Socket ---
+                socket.onopen = function(e) {
+                    console.log("WebSocket Abierto.");
+                    statusDisplay.textContent = 'Estado: Conectado. Procesamiento activo.';
+                    statusDisplay.style.color = 'green';
+                    
+                    // Actualizar botón a estado "Detener"
+                    controlButton.innerHTML = '<i class="fas fa-stop"></i> Detener Detección';
+                    controlButton.classList.remove('stopped');
+                    
+                    // Enviar comando 'start' al servidor (opcional, depende de tu consumer)
+                    socket.send(JSON.stringify({ 'command': 'start' }));
+                };
+
+                socket.onmessage = function(e) {
+                    // No se necesita `isProcessing`, si el socket está abierto, procesamos
+                    const data = JSON.parse(e.data);
+                    videoFeed.src = 'data:image/jpeg;base64,' + data.image;
+                    counterDisplay.textContent = 'Personas Detectadas: ' + data.count;
+                };
+
+                socket.onclose = function(e) {
+                    console.log('Socket cerrado.', e);
+                    // Actualizar UI a estado "detenido"
+                    if (statusDisplay.style.color !== 'gray') { // No sobrescribir si fue detenido por el usuario
+                        statusDisplay.textContent = 'Estado: Desconectado. (Intente iniciar de nuevo)';
+                        statusDisplay.style.color = 'red';
+                    }
+                    videoFeed.src = imgPaused;
+                    counterDisplay.textContent = 'Detección en Pausa';
+                    
+                    // Limpiar el objeto socket para que se pueda crear uno nuevo
+                    socket = null; 
+                    
+                    // Asegurarse que el botón muestre "Iniciar"
+                    controlButton.innerHTML = '<i class="fas fa-play"></i> Iniciar Detección';
+                    controlButton.classList.add('stopped');
+                };
+
+                socket.onerror = function(e) {
+                    console.error('Error de WebSocket:', e);
+                    statusDisplay.textContent = 'Error de conexión. Verifique la consola.';
+                    statusDisplay.style.color = 'red';
+                    // onclose se llamará después, limpiando la UI.
+                };
+            }
+
+            // --- Función para DETENER la detección ---
+            function stopDetection() {
+                // Solo si el socket existe y está abierto
+                if (socket && socket.readyState === WebSocket.OPEN) {
+                    console.log("Deteniendo detección y cerrando WebSocket...");
+
+                    // Actualizar UI a estado "detenido" (ANTES de cerrar)
+                    statusDisplay.textContent = 'Estado: Detenido por el usuario.';
+                    statusDisplay.style.color = 'gray'; // 'gray' indica cierre intencional
+                    videoFeed.src = imgPaused;
+                    counterDisplay.textContent = 'Detección en Pausa';
+                    controlButton.innerHTML = '<i class="fas fa-play"></i> Iniciar Detección';
+                    controlButton.classList.add('stopped');
+
+                    // **PUNTO CLAVE: Enviar 'stop' y CERRAR el socket**
+                    socket.send(JSON.stringify({ 'command': 'stop' }));
+                    socket.close();
+                    socket = null; // Limpiar para la próxima conexión
+                } else {
+                    console.log("Socket no está abierto, nada que detener.");
+                    // Forzar UI a estado detenido por si acaso
+                    controlButton.innerHTML = '<i class="fas fa-play"></i> Iniciar Detección';
+                    controlButton.classList.add('stopped');
+                    videoFeed.src = imgPaused;
+                    counterDisplay.textContent = 'Detección en Pausa';
+                    socket = null;
+                }
+            }
             
-            // Actualiza la imagen con el frame codificado en Base64
-            videoFeed.src = 'data:image/jpeg;base64,' + data.image;
-            
-            // Actualiza el contador
-            counterDisplay.textContent = 'Personas Detectadas: ' + data.count;
-        };
+            // --- Lógica del Botón de Control ---
+            controlButton.addEventListener('click', function() {
+                // En lugar de un flag, revisamos el estado REAL del socket
+                if (socket && socket.readyState === WebSocket.OPEN) {
+                    // Si está abierto, la acción es detener
+                    stopDetection();
+                } else {
+                    // Si está cerrado, nulo, o conectando, la acción es (re)iniciar
+                    startDetection();
+                }
+            });
 
-        // Manejo de estado de conexión
-        socket.onopen = function(e) {
-            statusDisplay.textContent = 'Estado: Conectado. Procesamiento activo.';
-            statusDisplay.style.color = 'green';
-        };
+            // --- Estado Inicial ---
+            // La página carga en estado "detenido"
+            stopDetection();
 
-        socket.onclose = function(e) {
-            statusDisplay.textContent = 'Estado: Desconectado. (Reinicie el servidor)';
-            statusDisplay.style.color = 'red';
-            console.error('Socket cerrado inesperadamente', e);
-        };
+        }); // Fin de DOMContentLoaded
     </script>
 </body>
 </html>
