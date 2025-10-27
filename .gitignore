@@ -1,0 +1,63 @@
+# ==========================
+# ⚙️ Archivos del sistema
+# ==========================
+.DS_Store
+Thumbs.db
+
+# ==========================
+# 🧠 Entorno virtual
+# ==========================
+env/
+venv/
+ENV/
+.venv/
+
+# ==========================
+# 🐍 Archivos Python
+# ==========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ==========================
+# 📦 Archivos de dependencias
+# ==========================
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+sdist/
+develop-eggs/
+.installed.cfg
+
+# ==========================
+# 🧱 Django
+# ==========================
+*.log
+db.sqlite3
+media/
+staticfiles/
+migrations/
+!*/migrations/__init__.py  # Mantén los __init__ para no romper las apps
+
+# ==========================
+# 🧩 Configuración y entorno
+# ==========================
+.env
+.env.*
+config.yml
+
+# ==========================
+# 💻 IDEs
+# ==========================
+.vscode/
+.idea/
+*.iml
+
+# ==========================
+# 🧰 Otros archivos temporales
+# ==========================
+*.tmp
+*~
